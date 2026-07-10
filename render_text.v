@@ -458,7 +458,11 @@ fn render_cursor(shape &Shape, _ DrawClip, mut window Window) {
 				rect.x
 			cy := shape.y + shape.padding_top() + rect.y
 			ch := rect.height
-
+			$if windows {
+				if window.ime.overlay != unsafe { nil } {
+					set_ime_position(window.ime.overlay, int(cx), int(cy)+5)
+				}
+			}
 			// Draw cursor line
 			emit_renderer(DrawRect{
 				x:     cx
