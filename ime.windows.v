@@ -35,33 +35,3 @@ fn set_ime_position(hwnd voidptr, x int, y int) {
 		}
 	}
 }
-// IME holds per-window Input Method Editor state.
-// Created lazily because the native window is not ready during
-// init_fn.
-struct IME {
-mut:
-	overlay     voidptr = unsafe { nil }
-	handler     voidptr = unsafe { nil }
-	initialized bool
-}
-
-// ime_create_overlay creates the platform-specific IME overlay.
-// Returns nil on platforms without IME overlay support.
-fn ime_create_overlay() voidptr {
-	$if macos {
-		ns_window := sapp.macos_get_window()
-		if ns_window == unsafe { nil } {
-			return unsafe { nil }
-		}
-		return vglyph.ime_overlay_create_auto(ns_window)
-	} $if windows {
-		hwnd := sapp.win32_get_hwnd()
-		if hwnd == unsafe { nil } {
-			return unsafe { nil }
-		}
-		return hwnd
-	} $else {
-		// Linux: vglyph stubs return nil (no overlay yet).
-		return unsafe { nil }
-	}
-}
