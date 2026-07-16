@@ -1,3 +1,5 @@
+module gui
+
 #flag windows -limm32
 struct C.POINT {
 mut:
